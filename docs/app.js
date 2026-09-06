@@ -107,18 +107,34 @@ function roundHalfEven(value) {
   return lower % 2 === 0 ? lower : lower + 1;
 }
 
+const EASY_QUALITY = 5;      // "Einfach"
+const EASY_START_DAYS = 14;  // Startsprung, siehe unten
+const EASY_BONUS = 1.3;      // Zuschlag auf reife Karten, wie in Anki
+const MAX_INTERVAL_DAYS = 365; // Deckel: was Tobi behalten will, soll jaehrlich auftauchen
+
 /** Portierung von sm2() in sync_tana_sr.py — gegen die Python-Funktion ueber
  *  19'360 Kombinationen auf Gleichheit geprueft. Rechnet nur fuer die laufende
- *  Session vor, massgeblich bleibt der Nachlauf des Mac-Skripts. */
+ *  Session vor, massgeblich bleibt der Nachlauf des Mac-Skripts.
+ *
+ *  Abweichung vom klassischen SM-2, bewusst (Entscheid Tobi 06.09.2026): dort
+ *  sind die Intervalle der ersten beiden Stufen fest (1 und 6 Tage), die Note
+ *  aendert daran nichts. Bei der Migration bekamen 1120 der 1181 Karten
+ *  repetitions=1 als Heuristik und landeten alle auf der 6-Tage-Stufe, obwohl
+ *  Tobi sie teils seit Jahren sicher kann. "Einfach" springt deshalb auf diesen
+ *  Stufen direkt auf EASY_START_DAYS und traegt danach den Easy-Bonus. */
 function sm2(ease, interval, repetitions, quality) {
   if (quality < 3) {
     repetitions = 0;
     interval = 1;
   } else {
-    if (repetitions === 0) interval = 1;
+    if (quality === EASY_QUALITY && repetitions <= 1) interval = EASY_START_DAYS;
+    else if (repetitions === 0) interval = 1;
     else if (repetitions === 1) interval = 6;
-    else interval = roundHalfEven(interval * ease);
+    // Klammerung wie in sync_tana_sr.py (erst ease * bonus): eine andere
+    // Reihenfolge weicht durch Gleitkomma-Rundung um einen Tag ab.
+    else interval = roundHalfEven(interval * (ease * (quality === EASY_QUALITY ? EASY_BONUS : 1)));
     repetitions += 1;
+    interval = Math.min(interval, MAX_INTERVAL_DAYS);
   }
   const newEase = Math.max(1.3, ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
   return { ease: roundHalfEven(newEase * 100) / 100, interval, repetitions };

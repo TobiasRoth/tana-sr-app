@@ -11,6 +11,16 @@ enum SM2 {
         let dueDate: Date
     }
 
+    static let easyQuality = 5      // "Einfach"
+    static let easyStartDays = 14   // Startsprung, siehe unten
+    static let easyBonus = 1.3      // Zuschlag auf reife Karten, wie in Anki
+    static let maxIntervalDays = 365 // Deckel: was Tobi behalten will, soll jaehrlich auftauchen
+
+    /// Abweichung vom klassischen SM-2, bewusst (Entscheid Tobi 06.09.2026):
+    /// dort sind die Intervalle der ersten beiden Stufen fest (1 und 6 Tage).
+    /// Bei der Migration bekamen 1120 der 1181 Karten repetitions=1 und landeten
+    /// alle auf der 6-Tage-Stufe. "Einfach" springt deshalb auf diesen Stufen
+    /// direkt auf easyStartDays und traegt danach den Easy-Bonus.
     static func review(ease: Double, intervalDays: Int, repetitions: Int, quality: Int, now: Date = Date()) -> Result {
         var newInterval: Int
         var newRepetitions: Int
@@ -19,14 +29,18 @@ enum SM2 {
             newRepetitions = 0
             newInterval = 1
         } else {
-            if repetitions == 0 {
+            if quality == easyQuality && repetitions <= 1 {
+                newInterval = easyStartDays
+            } else if repetitions == 0 {
                 newInterval = 1
             } else if repetitions == 1 {
                 newInterval = 6
             } else {
-                newInterval = Int((Double(intervalDays) * ease).rounded())
+                let factor = ease * (quality == easyQuality ? easyBonus : 1)
+                newInterval = Int((Double(intervalDays) * factor).rounded())
             }
             newRepetitions = repetitions + 1
+            newInterval = min(newInterval, maxIntervalDays)
         }
 
         let qualityDouble = Double(quality)
