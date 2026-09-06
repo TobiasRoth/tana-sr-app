@@ -61,6 +61,11 @@ Dropbox-Refresh-Token aus `~/.tana-sr/dropbox_credentials.json` einfügen.
 - Offline: Service Worker cacht die App, `cards.json` und die Medien der
   nächsten 40 fälligen Karten. Bewertungen werden lokal gestapelt und beim
   nächsten Netz nach Dropbox geschoben (Zähler oben rechts)
+- Bewertete Karten bleiben auch über einen Neustart weg, obwohl `cards.json`
+  erst nach dem nächsten Mac-Sync (alle 15 min) aktualisiert ist: ein lokales
+  Journal spielt die eigenen Bewertungen auf die geladenen Karten nach und wird
+  geleert, sobald `cards.json` sie zeigt. **Die iOS-App hat diese Lücke noch** —
+  dort kehren gerade bewertete Karten nach einem Neustart zurück.
 - Tastatur am Desktop: Leertaste zeigt die Antwort, `1`–`4` bewerten
 
 ## Bekannte Grenzen

@@ -12,9 +12,11 @@
 const APP_KEY = 'mnrl1klwytt1trq';          // PKCE-App, kein Secret noetig
 const TOKEN_KEY = 'tanasr.dropbox_refresh_token';
 const QUEUE_KEY = 'tanasr.pending_reviews';
+const JOURNAL_KEY = 'tanasr.review_journal';
 const DATA_CACHE = 'tanasr-data-v1';
 const MEDIA_CACHE = 'tanasr-media-v1';
 const MEDIA_PREFETCH = 40;                   // Medien der naechsten N Karten vorladen
+const JOURNAL_MAX_AGE_MS = 30 * 86400000;    // verwaiste Journal-Eintraege verwerfen
 
 /* ---------------------------------------------------------------- Dropbox */
 
@@ -148,24 +150,69 @@ function isoDate(date = new Date()) {
   return date.toLocaleDateString('sv-SE', { timeZone: 'Europe/Zurich' });
 }
 
-function isoDatePlusDays(days) {
-  return isoDate(new Date(Date.now() + days * 86400000));
+function isoDatePlusDays(days, from = Date.now()) {
+  return isoDate(new Date(from + days * 86400000));
 }
 
 /* -------------------------------------------------------------------- Store */
 
 const store = {
   async loadCards() {
+    let cards;
     try {
       const text = await dropbox.download('/cards.json');
       const cache = await caches.open(DATA_CACHE);
       await cache.put('cards.json', new Response(text));
-      return JSON.parse(text);
+      cards = JSON.parse(text);
     } catch (err) {
       const cached = await (await caches.open(DATA_CACHE)).match('cards.json');
-      if (cached) return JSON.parse(await cached.text());
-      throw err;
+      if (!cached) throw err;
+      cards = JSON.parse(await cached.text());
     }
+    return this.replayJournal(cards);
+  },
+
+  journal() {
+    try { return JSON.parse(localStorage.getItem(JOURNAL_KEY) || '[]'); }
+    catch { return []; }
+  },
+
+  saveJournal(entries) {
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(entries));
+  },
+
+  /** cards.json bleibt unveraendert, bis das Mac-Skript die Reviews verarbeitet
+   *  hat (Lauf alle 15 Minuten). Ohne diesen Schritt waeren gerade bewertete
+   *  Karten nach einem Neustart der App wieder faellig. Das Journal haelt die
+   *  eigenen Bewertungen deshalb so lange vor, bis cards.json sie zeigt --
+   *  laenger als die Upload-Warteschlange, die nach dem Upload geleert wird. */
+  replayJournal(cards) {
+    const byId = new Map(cards.map(card => [card.tana_node_id, card]));
+    const cutoff = Date.now() - JOURNAL_MAX_AGE_MS;
+    const keep = [];
+
+    for (const entry of this.journal().sort((a, b) => a.reviewed_at.localeCompare(b.reviewed_at))) {
+      const card = byId.get(entry.tana_node_id);
+      if (!card) {
+        // Karte (noch) nicht in cards.json — eine Weile aufheben, dann verwerfen.
+        if (Date.parse(entry.reviewed_at) > cutoff) keep.push(entry);
+        continue;
+      }
+      if (entry.reviewed_at <= (card.last_reviewed_at || '')) continue;  // vom Mac-Skript verarbeitet
+
+      const result = sm2(card.ease_factor, card.interval_days, card.repetitions, GRADE_QUALITY[entry.grade]);
+      Object.assign(card, {
+        ease_factor: result.ease,
+        interval_days: result.interval,
+        repetitions: result.repetitions,
+        due_date: isoDatePlusDays(result.interval, Date.parse(entry.reviewed_at)),
+        last_reviewed_at: entry.reviewed_at,
+      });
+      keep.push(entry);
+    }
+
+    this.saveJournal(keep);
+    return cards;
   },
 
   queue() {
@@ -181,6 +228,7 @@ const store = {
    *  nach Dropbox mergen. Scheitert der Upload, bleibt sie in der Warteschlange. */
   async submitReview(review) {
     this.saveQueue([...this.queue(), review]);
+    this.saveJournal([...this.journal(), review]);
     await this.flush();
   },
 
