@@ -89,13 +89,20 @@ button.audio { width: 100%; font-weight: 600; }
   border: 1px solid var(--hard); border-radius: 99px; padding: 2px 8px;
 }
 
-.scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
 #card-image { width: 100%; max-height: 45vh; object-fit: contain; border-radius: var(--radius); margin-bottom: 14px; }
 #card-audio { display: none; }
 hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
 #answer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 #answer-list li { padding-left: 18px; position: relative; }
 #answer-list li::before { content: "•"; position: absolute; left: 2px; color: var(--muted); }
+
+/* Auszeichnung aus Tana: Links, Hervorhebungen, eingebettete Bilder, #tags */
+a { color: var(--accent); overflow-wrap: anywhere; }
+mark { background: color-mix(in srgb, var(--hard) 30%, transparent); color: inherit; padding: 0 2px; border-radius: 3px; }
+.tag { color: var(--muted); font-size: .82em; }
+.inline-image { display: block; max-width: 100%; border-radius: 8px; margin: 8px 0; }
+#card-question .tag { font-size: .6em; vertical-align: middle; }
 
 .controls { padding-top: 12px; }
 .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }

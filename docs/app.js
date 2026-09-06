@@ -222,13 +222,86 @@ function escapeHtml(text) {
   return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 }
 
-/** Inline-Markdown wie in AttributedString(markdown:) der iOS-App: **fett**,
- *  *kursiv*, `code`. Bewusst kein voller Markdown-Parser. */
-function inlineMarkdown(text) {
-  return escapeHtml(text)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*]+?)\*/g, '$1<em>$2</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>');
+/* Inline-Auszeichnung, wie sie aus Tana in answer_markdown ankommt (gegen alle
+ * 1181 Karten erhoben): <a href>-Links, <mark>-Hervorhebungen, Markdown-Links
+ * (ganz ueberwiegend eingebettete Bilder), Tana-Referenzen [Text](tana:ID),
+ * nackte URLs, **fett**, *kursiv* und #tags. */
+
+const IMAGE_URL_RE = /\.(png|jpe?g|gif|webp|avif)(\?|$)/i;
+const SAFE_URL_RE = /^(https?:|mailto:|tana:)/i;
+const TANA_INLINE_LIMIT = 60;   // ab hier steht der Tana-Sprung hinter dem Text
+
+/** Nur bekannte Schemata verlinken — verhindert javascript: aus Kartentext. */
+function safeUrl(url) {
+  const trimmed = (url || '').trim();
+  return SAFE_URL_RE.test(trimmed) ? trimmed : null;
+}
+
+/** Aussenlinks muessen aus der installierten PWA heraus in Safari aufgehen —
+ *  sonst ersetzt die Seite die App und es gibt keinen Weg zurueck. */
+function linkHtml(url, innerHtml) {
+  const safe = safeUrl(url);
+  if (!safe) return innerHtml;
+  const external = !safe.toLowerCase().startsWith('tana:');
+  const target = external ? ' target="_blank" rel="noopener noreferrer"' : '';
+  return `<a href="${escapeHtml(safe)}"${target}>${innerHtml}</a>`;
+}
+
+// Reihenfolge zaehlt: frueh stehende Alternativen verbrauchen ihren Text, damit
+// z.B. eine URL innerhalb eines <a href> nicht nochmals als nackte URL matcht.
+const INLINE_RE = new RegExp([
+  /<a\s+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/.source,   // 1 href, 2 Text
+  /<mark>([\s\S]*?)<\/mark>/.source,                    // 3 Text
+  /!?\[([^\]]*)\]\(([^)\s]+)\)/.source,               // 4 Text, 5 Ziel
+  /(https?:\/\/[^\s<>()]+)/.source,                     // 6 nackte URL
+  /\*\*([^*]+)\*\*/.source,                             // 7 fett
+  /\*([^*\n]+)\*/.source,                               // 8 kursiv
+  /#([A-Za-zÄÖÜäöü][\w-]*)/.source,                      // 9 Tana-Tag
+].join('|'), 'g');
+
+function renderInline(text, depth = 0) {
+  let out = '';
+  let last = 0;
+
+  for (const m of String(text).matchAll(INLINE_RE)) {
+    out += escapeHtml(text.slice(last, m.index));
+    last = m.index + m[0].length;
+
+    const [, aHref, aText, markText, mdText, mdUrl, bareUrl, bold, italic, tag] = m;
+    const inner = value => (depth < 2 ? renderInline(value, depth + 1) : escapeHtml(value));
+
+    if (aHref !== undefined) {
+      out += linkHtml(aHref, inner(aText));
+    } else if (markText !== undefined) {
+      out += `<mark>${inner(markText)}</mark>`;
+    } else if (mdUrl !== undefined) {
+      const safe = safeUrl(mdUrl);
+      if (safe && IMAGE_URL_RE.test(safe) && !safe.toLowerCase().startsWith('tana:')) {
+        out += `<img class="inline-image" src="${escapeHtml(safe)}" alt="${escapeHtml(mdText)}" loading="lazy">`;
+      } else {
+        // Bullets der Form [](tana:ID) haben keinen Linktext — die nackte ID
+        // waere unlesbar, deshalb eine Beschriftung.
+        const isTana = safe && safe.toLowerCase().startsWith('tana:');
+        if (isTana && mdText.length > TANA_INLINE_LIMIT) {
+          // Ganze Zitate sind in Tana die Referenz. Den Absatz durchgehend blau
+          // zu faerben macht ihn unlesbar, deshalb steht der Sprung dahinter.
+          out += `${inner(mdText)} ${linkHtml(mdUrl, '↗')}`;
+        } else {
+          out += linkHtml(mdUrl, inner(mdText) || (isTana ? '↗ Tana' : escapeHtml(mdUrl)));
+        }
+      }
+    } else if (bareUrl !== undefined) {
+      out += linkHtml(bareUrl, escapeHtml(bareUrl));
+    } else if (bold !== undefined) {
+      out += `<strong>${inner(bold)}</strong>`;
+    } else if (italic !== undefined) {
+      out += `<em>${inner(italic)}</em>`;
+    } else if (tag !== undefined) {
+      out += `<span class="tag">#${escapeHtml(tag)}</span>`;
+    }
+  }
+
+  return out + escapeHtml(text.slice(last));
 }
 
 function answerBullets(markdown) {
@@ -297,14 +370,15 @@ const session = {
       audio.removeAttribute('src');
     }
 
-    $('card-question').textContent = card.question || '';
+    // Fragen tragen vereinzelt **fett** und #tags, deshalb derselbe Renderer.
+    $('card-question').innerHTML = renderInline(card.question || '');
 
     $('card-answer').hidden = !this.revealed;
     $('reveal-btn').hidden = this.revealed;
     $('grade-row').hidden = !this.revealed;
     if (this.revealed) {
       $('answer-list').innerHTML = answerBullets(card.answer_markdown)
-        .map(bullet => `<li>${inlineMarkdown(bullet)}</li>`)
+        .map(bullet => `<li>${renderInline(bullet)}</li>`)
         .join('');
     }
   },

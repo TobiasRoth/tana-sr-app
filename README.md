@@ -37,6 +37,10 @@ Dropbox-Refresh-Token aus `~/.tana-sr/dropbox_credentials.json` einfügen.
 ## Was die PWA kann
 
 - Fällige Karten, Bild und Vogelstimme, vier Bewertungsstufen wie in der iOS-App
+- Tana-Auszeichnung wird gerendert: `<a href>`- und `<mark>`-Auszeichnung,
+  Markdown-Links, eingebettete Bilder, Tana-Referenzen `[Text](tana:ID)`,
+  nackte URLs, `**fett**`, `*kursiv*`, `#tags`. Aussenlinks öffnen in Safari
+  (`target="_blank"`), sonst ersetzt die Seite die installierte App
 - Offline: Service Worker cacht die App, `cards.json` und die Medien der
   nächsten 40 fälligen Karten. Bewertungen werden lokal gestapelt und beim
   nächsten Netz nach Dropbox geschoben (Zähler oben rechts)
@@ -48,6 +52,8 @@ Dropbox-Refresh-Token aus `~/.tana-sr/dropbox_credentials.json` einfügen.
   App-Folder-Scope, kommt also nur an den Dropbox-Ordner `TanaSR`.
 - Autoplay der Vogelstimme unterbindet iOS ohne vorherige Tippgeste — dafür gibt
   es den Abspiel-Knopf.
+- Ob `tana:`-Referenzen beim Antippen die Tana-App öffnen, hängt davon ab, ob
+  Tana das URL-Schema auf dem Gerät registriert — ungeprüft.
 - `reviews-pending.json` wird gelesen und komplett zurückgeschrieben. Leert das
   Mac-Skript die Datei genau zwischen diesen beiden Schritten, geht dessen
   Änderung verloren. Gilt für die iOS-App genauso; bei 15-Minuten-Intervall und

@@ -1,5 +1,7 @@
 /* Service Worker: macht TanaSR offline lauffaehig.
- * - App-Shell: stale-while-revalidate (offline sofort da, Update kommt im Hintergrund)
+ * - App-Shell: network-first mit kurzem Timeout, Cache als Rueckfall. Damit ist
+ *   eine neu deployte Version sofort da statt erst beim uebernaechsten Start,
+ *   und ohne Netz startet die App trotzdem.
  * - Medien (Bilder, Xeno-Canto-Audio): cache-first, wird von app.js vorgeladen
  * - Dropbox-API (POST): nie abfangen
  */
@@ -42,22 +44,28 @@ self.addEventListener('fetch', event => {
   if (url.hostname.endsWith('dropboxapi.com')) return;
 
   if (url.origin === self.location.origin) {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(networkFirst(request));
   } else {
     event.respondWith(cacheFirst(request));
   }
 });
 
-async function staleWhileRevalidate(request) {
+const NETWORK_TIMEOUT_MS = 3000;
+
+async function networkFirst(request) {
   const cache = await caches.open(SHELL_CACHE);
-  const cached = await cache.match(request, { ignoreSearch: true });
-  const network = fetch(request)
-    .then(response => {
-      if (response.ok) cache.put(request, response.clone());
-      return response;
-    })
-    .catch(() => cached);
-  return cached || network;
+  try {
+    const response = await Promise.race([
+      fetch(request),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), NETWORK_TIMEOUT_MS)),
+    ]);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch (err) {
+    const cached = await cache.match(request, { ignoreSearch: true });
+    if (cached) return cached;
+    throw err;
+  }
 }
 
 async function cacheFirst(request) {
