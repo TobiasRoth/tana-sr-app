@@ -237,6 +237,18 @@ function safeUrl(url) {
   return SAFE_URL_RE.test(trimmed) ? trimmed : null;
 }
 
+/** Eine nackte URL als Linktext ist unlesbar (Readwise-Referenzen aus Tana):
+ *  auf die Domain kuerzen, das Ziel steht ohnehin im href. */
+function linkLabel(text) {
+  const trimmed = text.trim();
+  if (!/^https?:\/\/\S+$/.test(trimmed)) return null;
+  try {
+    return new URL(trimmed).hostname.replace(/^www\./, '') + '/…';
+  } catch {
+    return null;
+  }
+}
+
 /** Aussenlinks muessen aus der installierten PWA heraus in Safari aufgehen —
  *  sonst ersetzt die Seite die App und es gibt keinen Weg zurueck. */
 function linkHtml(url, innerHtml) {
@@ -259,7 +271,7 @@ const INLINE_RE = new RegExp([
   /#([A-Za-zÄÖÜäöü][\w-]*)/.source,                      // 9 Tana-Tag
 ].join('|'), 'g');
 
-function renderInline(text, depth = 0) {
+function renderInline(text, depth = 0, insideLink = false) {
   let out = '';
   let last = 0;
 
@@ -268,30 +280,39 @@ function renderInline(text, depth = 0) {
     last = m.index + m[0].length;
 
     const [, aHref, aText, markText, mdText, mdUrl, bareUrl, bold, italic, tag] = m;
-    const inner = value => (depth < 2 ? renderInline(value, depth + 1) : escapeHtml(value));
+    // Verschachtelte <a> sind ungueltiges HTML: innerhalb eines Links bleibt
+    // alles Weitere Text (Fall: Tana-Referenz, deren Name eine URL ist).
+    const inner = (value, nested = insideLink) =>
+      (depth < 2 ? renderInline(value, depth + 1, nested) : escapeHtml(value));
 
     if (aHref !== undefined) {
-      out += linkHtml(aHref, inner(aText));
+      out += insideLink ? inner(aText) : linkHtml(aHref, inner(aText, true));
     } else if (markText !== undefined) {
       out += `<mark>${inner(markText)}</mark>`;
     } else if (mdUrl !== undefined) {
       const safe = safeUrl(mdUrl);
       if (safe && IMAGE_URL_RE.test(safe) && !safe.toLowerCase().startsWith('tana:')) {
         out += `<img class="inline-image" src="${escapeHtml(safe)}" alt="${escapeHtml(mdText)}" loading="lazy">`;
+      } else if (insideLink) {
+        out += inner(mdText) || escapeHtml(mdUrl);
       } else {
         // Bullets der Form [](tana:ID) haben keinen Linktext — die nackte ID
         // waere unlesbar, deshalb eine Beschriftung.
         const isTana = safe && safe.toLowerCase().startsWith('tana:');
-        if (isTana && mdText.length > TANA_INLINE_LIMIT) {
+        const shortened = linkLabel(mdText);
+        if (isTana && !shortened && mdText.length > TANA_INLINE_LIMIT) {
           // Ganze Zitate sind in Tana die Referenz. Den Absatz durchgehend blau
           // zu faerben macht ihn unlesbar, deshalb steht der Sprung dahinter.
           out += `${inner(mdText)} ${linkHtml(mdUrl, '↗')}`;
         } else {
-          out += linkHtml(mdUrl, inner(mdText) || (isTana ? '↗ Tana' : escapeHtml(mdUrl)));
+          const label = shortened
+            ? escapeHtml(shortened)
+            : inner(mdText, true) || (isTana ? '↗ Tana' : escapeHtml(mdUrl));
+          out += linkHtml(mdUrl, label);
         }
       }
     } else if (bareUrl !== undefined) {
-      out += linkHtml(bareUrl, escapeHtml(bareUrl));
+      out += insideLink ? escapeHtml(bareUrl) : linkHtml(bareUrl, escapeHtml(bareUrl));
     } else if (bold !== undefined) {
       out += `<strong>${inner(bold)}</strong>`;
     } else if (italic !== undefined) {
