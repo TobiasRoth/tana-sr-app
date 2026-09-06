@@ -1,0 +1,23 @@
+name: TanaSR
+options:
+  bundleIdPrefix: ch.roth
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  TanaSR:
+    type: application
+    platform: iOS
+    sources:
+      - path: TanaSR
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ch.roth.tanasr
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_CFBundleDisplayName: "TanaSR"
+        DEVELOPMENT_TEAM: "N3F3DF48NS"
+        CODE_SIGN_STYLE: Automatic

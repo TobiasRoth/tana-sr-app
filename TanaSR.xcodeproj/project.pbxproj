@@ -1,0 +1,378 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0388FF0658353399F6F439F8 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1723B2A118AF3D5E12F692 /* KeychainStore.swift */; };
+		2F55BCD82921B17B75E06D1C /* StudySessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02616020DE749682FC77F6B /* StudySessionView.swift */; };
+		30FAF29CD204866749757B70 /* ConnectDropboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA04766BAF54ED3C1A35FFF1 /* ConnectDropboxView.swift */; };
+		516D6C301A97C8803C14C524 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D89E597D98A55039C8375B3 /* RootView.swift */; };
+		5B6E540B99A7B056D553E8AE /* TanaSRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950B9DCB2CFB18DAAF588048 /* TanaSRApp.swift */; };
+		62AFEDAFB1354DC3E98ED27E /* DropboxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4ADF29BF988C8998B955 /* DropboxClient.swift */; };
+		84F12A95BE8FD9A4BDE37589 /* SM2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BAF38F83A3E4B40B05FAB6 /* SM2.swift */; };
+		8735FAE5C22BD8A2C937E74F /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E14D45013F94976EAD5569 /* Card.swift */; };
+		8E6631FAD4A010CE10367037 /* DropboxCardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7ADBE16F774BBD3D537976D /* DropboxCardStore.swift */; };
+		9201A5EDB72F4C510CD936F3 /* PendingReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26FBF41604DDA21840F947 /* PendingReview.swift */; };
+		9A517C3C0652FC38E306CF9E /* Grade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF1A71C0A83D7715F59477D /* Grade.swift */; };
+		A60EB3E5BF8F089820B11148 /* StudySessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CBA48177C37416E0980715 /* StudySessionViewModel.swift */; };
+		F55EAAB1E17E108F6B1B3C03 /* CardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C17125E3EB8188F2E26DD /* CardStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		126F8956A09E4C0CF25D6F17 /* TanaSR.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TanaSR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18BAF38F83A3E4B40B05FAB6 /* SM2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM2.swift; sourceTree = "<group>"; };
+		2BF1A71C0A83D7715F59477D /* Grade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grade.swift; sourceTree = "<group>"; };
+		3B1723B2A118AF3D5E12F692 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		5D89E597D98A55039C8375B3 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		717A4ADF29BF988C8998B955 /* DropboxClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxClient.swift; sourceTree = "<group>"; };
+		950B9DCB2CFB18DAAF588048 /* TanaSRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TanaSRApp.swift; sourceTree = "<group>"; };
+		AA04766BAF54ED3C1A35FFF1 /* ConnectDropboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDropboxView.swift; sourceTree = "<group>"; };
+		B3CBA48177C37416E0980715 /* StudySessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionViewModel.swift; sourceTree = "<group>"; };
+		B7ADBE16F774BBD3D537976D /* DropboxCardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxCardStore.swift; sourceTree = "<group>"; };
+		DE0C17125E3EB8188F2E26DD /* CardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStore.swift; sourceTree = "<group>"; };
+		E2E14D45013F94976EAD5569 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		F02616020DE749682FC77F6B /* StudySessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionView.swift; sourceTree = "<group>"; };
+		FD26FBF41604DDA21840F947 /* PendingReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingReview.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		3947EADFE734470304D522F9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				DE0C17125E3EB8188F2E26DD /* CardStore.swift */,
+				B7ADBE16F774BBD3D537976D /* DropboxCardStore.swift */,
+				717A4ADF29BF988C8998B955 /* DropboxClient.swift */,
+				3B1723B2A118AF3D5E12F692 /* KeychainStore.swift */,
+				18BAF38F83A3E4B40B05FAB6 /* SM2.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		54B35EE5758F6504351E5529 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				126F8956A09E4C0CF25D6F17 /* TanaSR.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		563C0975A1AF51A03B64F8D2 /* TanaSR */ = {
+			isa = PBXGroup;
+			children = (
+				950B9DCB2CFB18DAAF588048 /* TanaSRApp.swift */,
+				82A40CFCC4FCC2C843184B11 /* Models */,
+				3947EADFE734470304D522F9 /* Services */,
+				A0DE69C134C593CFAA9D73DB /* ViewModels */,
+				9B9F44B39CD594E100F9015C /* Views */,
+			);
+			path = TanaSR;
+			sourceTree = "<group>";
+		};
+		82A40CFCC4FCC2C843184B11 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E2E14D45013F94976EAD5569 /* Card.swift */,
+				2BF1A71C0A83D7715F59477D /* Grade.swift */,
+				FD26FBF41604DDA21840F947 /* PendingReview.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9B9F44B39CD594E100F9015C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA04766BAF54ED3C1A35FFF1 /* ConnectDropboxView.swift */,
+				5D89E597D98A55039C8375B3 /* RootView.swift */,
+				F02616020DE749682FC77F6B /* StudySessionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9E961840773524BEE375B518 = {
+			isa = PBXGroup;
+			children = (
+				563C0975A1AF51A03B64F8D2 /* TanaSR */,
+				54B35EE5758F6504351E5529 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A0DE69C134C593CFAA9D73DB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B3CBA48177C37416E0980715 /* StudySessionViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		98BFB90051ECF8594EFA7626 /* TanaSR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7B10AA6E59BA000AE5DD0E5 /* Build configuration list for PBXNativeTarget "TanaSR" */;
+			buildPhases = (
+				8CBC41B2DB89694DBBF8EFAB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TanaSR;
+			packageProductDependencies = (
+			);
+			productName = TanaSR;
+			productReference = 126F8956A09E4C0CF25D6F17 /* TanaSR.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE92C16917F80B7805AF4A9C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					98BFB90051ECF8594EFA7626 = {
+						DevelopmentTeam = N3F3DF48NS;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CA80155DBDB10B363E0367A7 /* Build configuration list for PBXProject "TanaSR" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 9E961840773524BEE375B518;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 54B35EE5758F6504351E5529 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				98BFB90051ECF8594EFA7626 /* TanaSR */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8CBC41B2DB89694DBBF8EFAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8735FAE5C22BD8A2C937E74F /* Card.swift in Sources */,
+				F55EAAB1E17E108F6B1B3C03 /* CardStore.swift in Sources */,
+				30FAF29CD204866749757B70 /* ConnectDropboxView.swift in Sources */,
+				8E6631FAD4A010CE10367037 /* DropboxCardStore.swift in Sources */,
+				62AFEDAFB1354DC3E98ED27E /* DropboxClient.swift in Sources */,
+				9A517C3C0652FC38E306CF9E /* Grade.swift in Sources */,
+				0388FF0658353399F6F439F8 /* KeychainStore.swift in Sources */,
+				9201A5EDB72F4C510CD936F3 /* PendingReview.swift in Sources */,
+				516D6C301A97C8803C14C524 /* RootView.swift in Sources */,
+				84F12A95BE8FD9A4BDE37589 /* SM2.swift in Sources */,
+				2F55BCD82921B17B75E06D1C /* StudySessionView.swift in Sources */,
+				A60EB3E5BF8F089820B11148 /* StudySessionViewModel.swift in Sources */,
+				5B6E540B99A7B056D553E8AE /* TanaSRApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		53DB547F901CDDBAEE8B45D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N3F3DF48NS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = TanaSR;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.roth.tanasr;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		5CC850509C14CE52AF9E295E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AABB41319DE35B3B4E17DDFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N3F3DF48NS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = TanaSR;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.roth.tanasr;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BACBF0C94E7AA89A2A852D4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7B10AA6E59BA000AE5DD0E5 /* Build configuration list for PBXNativeTarget "TanaSR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AABB41319DE35B3B4E17DDFE /* Debug */,
+				53DB547F901CDDBAEE8B45D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CA80155DBDB10B363E0367A7 /* Build configuration list for PBXProject "TanaSR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BACBF0C94E7AA89A2A852D4F /* Debug */,
+				5CC850509C14CE52AF9E295E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE92C16917F80B7805AF4A9C /* Project object */;
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TanaSR</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TanaSR">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Verbinden -->
+<section id="view-connect" class="view" hidden>
+  <div class="pane center">
+    <div class="glyph">🔗</div>
+    <h1>Mit Dropbox verbinden</h1>
+    <p class="muted">Refresh-Token vom Mac einfügen — aus <code>authorize_dropbox.py</code>,
+       gespeichert unter <code>~/.tana-sr/dropbox_credentials.json</code>.</p>
+    <input id="token-input" type="password" inputmode="text" autocomplete="off"
+           autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Refresh-Token">
+    <p id="connect-error" class="error" hidden></p>
+    <button id="connect-btn" class="primary big">Verbinden</button>
+  </div>
+</section>
+
+<!-- Laden -->
+<section id="view-loading" class="view" hidden>
+  <div class="pane center">
+    <div class="spinner"></div>
+    <p id="loading-text" class="muted">Karten laden…</p>
+  </div>
+</section>
+
+<!-- Fehler -->
+<section id="view-error" class="view" hidden>
+  <div class="pane center">
+    <div class="glyph">⚠️</div>
+    <h1>Fehler</h1>
+    <p id="error-text" class="muted"></p>
+    <button id="retry-btn" class="primary big">Nochmal versuchen</button>
+    <button id="reset-btn" class="ghost">Dropbox-Verbindung zurücksetzen</button>
+  </div>
+</section>
+
+<!-- Fertig -->
+<section id="view-done" class="view" hidden>
+  <div class="pane center">
+    <div class="glyph">✅</div>
+    <h1>Alles gelernt</h1>
+    <p class="muted">Keine fälligen Karten mehr.</p>
+    <p id="done-pending" class="muted small" hidden></p>
+    <button id="reload-btn" class="primary big">Neu laden</button>
+  </div>
+</section>
+
+<!-- Lernen -->
+<section id="view-study" class="view" hidden>
+  <header class="bar">
+    <span id="remaining" class="muted small"></span>
+    <span id="sync-badge" class="badge" hidden></span>
+  </header>
+
+  <div id="card-scroll" class="scroll">
+    <img id="card-image" alt="" hidden>
+    <button id="audio-btn" class="primary audio" hidden>▶︎ Nochmals abspielen</button>
+    <audio id="card-audio" preload="auto"></audio>
+    <h2 id="card-question"></h2>
+    <div id="card-answer" hidden>
+      <hr>
+      <ul id="answer-list"></ul>
+    </div>
+  </div>
+
+  <footer class="controls">
+    <button id="reveal-btn" class="primary big">Antwort zeigen</button>
+    <div id="grade-row" class="grades" hidden>
+      <button class="grade again" data-grade="again">Nochmal</button>
+      <button class="grade hard"  data-grade="hard">Schwer</button>
+      <button class="grade good"  data-grade="good">Gut</button>
+      <button class="grade easy"  data-grade="easy">Einfach</button>
+    </div>
+  </footer>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
